@@ -17,12 +17,15 @@ const UserSchema = new mongoose.Schema({
     },
     Date: {
         type: Date,
-        required: Date.now,
+        default: Date.now,
     },
 });
 
-UserSchema.pre('save', function(next){
-    this.password = bcrypt.hashSync(this.password, 10);
+UserSchema.pre('save', async function(next){
+    if(this.password){
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, 10);
+    }
     next();
 });
 
