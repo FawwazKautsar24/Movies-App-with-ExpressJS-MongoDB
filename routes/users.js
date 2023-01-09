@@ -21,11 +21,11 @@ router.post('/register', (req, res, next) => {
 
   let errors = [];
   if(!name || !email || !password || !password2){
-    errors.push("Silahkan Lengkapi Data Anda");
+    errors.push({msg: "Silahkan Lengkapi Data Anda"});
     console.log("Silahkan Lengkapi Data Anda");
   }
   if(password != password2){
-    errors.push("Password Anda Tidak Sama!");
+    errors.push({msg: "Password Anda Tidak Sama!"});
     console.log("Password Anda Tidak Sama!");
   }
   if(errors.length > 0){
@@ -40,7 +40,7 @@ router.post('/register', (req, res, next) => {
     User.findOne({ email: email }).then(
       user => {
         if(user){
-          errors.push('Email Anda telah Terdaftar');
+          errors.push({msg: 'Email Anda telah Terdaftar'});
           console.log('Email Anda telah Terdaftar');
           res.render('register', {
             errors,
