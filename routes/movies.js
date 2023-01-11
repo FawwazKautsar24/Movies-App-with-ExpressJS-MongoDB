@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var Movie = require('../models/MovieSchema');
+
 // Get All Movies
 router.get('/', function(req, res, next) {
     res.render('movie/allMovies', {title: 'Get Movies Page'});
@@ -17,7 +19,30 @@ router.get('/update/:movieId', function(req, res, next) {
 });
 
 // Create Action
-router.post('/create', function(req, res) {});
+router.post('/create', function(req, res) {
+    const {name, date} = req.body;
+    
+    let errors = [];
+    if(!name || !date){
+        errors.push({msg: 'Silahkan Lengkapi Data yang Dibutuhkan'});
+    }
+
+    if(errors.length > 0){
+        res.render('movie/createMovie', {errors});
+    }else{
+        const newMovie = Movie({
+            name,
+            released_on: date
+        });
+        newMovie.save().then(
+            movie => {
+                errors.push({msg: 'Data Movies Berhasil Ditambah'});
+                res.render('movie/createMovie', {errors})
+            }
+        )
+        .catch(err => console.log(err));
+    }
+});
 
 // Update Action
 router.put('/update/:movieId', function(req, res) {});
