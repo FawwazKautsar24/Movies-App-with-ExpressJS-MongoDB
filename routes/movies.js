@@ -65,9 +65,13 @@ router.post('/create', function(req, res) {
 });
 
 // Update Action
-router.put('/update/:movieId', function(req, res) {});
+router.post('/update', function(req, res) {});
 
 // Delete Action
-router.delete('/delete/:movieId', function(req, res) {});
+router.get('/delete/:movieId', function(req, res) {
+   Movie.findByIdAndDelete(req.params.movieId, function(){
+    res.redirect('/movies');
+   }); 
+});
 
 module.exports = router;
