@@ -10,7 +10,16 @@
         <div class="card-body">
             <h5 class="card-title">Tanggal Tayang: <%= data.released_on %></h5>
             <a href="#" class="btn btn-warning">Edit</a>
-            <a href="#" class="btn btn-danger">delete</a>
+            <a class="btn btn-danger" data-toggle="collapse" href="#data<%= data.id %>" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Delete Data
+            </a>
+        </div>
+    </div>
+
+    <div class="collapse" id="data<%= data.id %>">
+        <div class="card card-body">
+            Apakah Anda Yakin Menghapus Film <%= data.name %>?
+            <a href="movies/delete/<%= data.id %>" class="btn btn-danger">Delete</a>
         </div>
     </div>
 <% } %>
