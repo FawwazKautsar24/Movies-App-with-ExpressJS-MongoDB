@@ -5,7 +5,27 @@ var Movie = require('../models/MovieSchema');
 
 // Get All Movies
 router.get('/', function(req, res, next) {
-    res.render('movie/allMovies', {title: 'Get Movies Page'});
+    let listMovies = [];
+    Movie.find(function(err, movies){
+        if(movies){
+            for(let data of movies){
+                listMovies.push({
+                    id: data._id,
+                    name: data.name,
+                    released_on: data.released_on,
+                });
+            }
+            res.render('movie/allMovies', {listMovies});
+        }else{
+            listMovies.push({
+                id: '',
+                name: '',
+                released_on: '',
+            });
+            res.render('movie/allMovies', {listMovies});
+        }
+    });
+    // res.render('movie/allMovies', {title: 'Get Movies Page'});
 });
 
 // Create Movies
