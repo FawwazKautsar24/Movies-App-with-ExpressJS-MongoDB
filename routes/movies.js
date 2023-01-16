@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
 var moment = require('moment');
 var Movie = require('../models/MovieSchema');
 
+const { cekAuth } = require('../config/auth');
+
 // Get All Movies
-router.get('/', function(req, res, next) {
+router.get('/', cekAuth, function(req, res, next) {
     let listMovies = [];
     Movie.find(function(err, movies){
         if(movies){
@@ -30,12 +31,12 @@ router.get('/', function(req, res, next) {
 });
 
 // Create Movies
-router.get('/create', function(req, res, next) {
+router.get('/create', cekAuth, function(req, res, next) {
     res.render('movie/createMovie', {title: 'Create Movie Page'});
 });
 
 // Update Movies
-router.get('/update/:movieId', function(req, res, next) {
+router.get('/update/:movieId', cekAuth, function(req, res, next) {
 
     Movie.findById(req.params.movieId, function(err, movieInfo){
         var newDate = moment(movieInfo.released_on).format('YYYY-MM-DD');
@@ -51,7 +52,7 @@ router.get('/update/:movieId', function(req, res, next) {
 });
 
 // Create Action
-router.post('/create', function(req, res) {
+router.post('/create', cekAuth, function(req, res) {
     const {name, date} = req.body;
     
     let errors = [];
@@ -77,7 +78,7 @@ router.post('/create', function(req, res) {
 });
 
 // Update Action
-router.post('/update', function(req, res) {
+router.post('/update', cekAuth, function(req, res) {
     let errors = [];
 
     Movie.findByIdAndUpdate(req.body.id, {name: req.body.name, released_on: req.body.date}, function(err){
@@ -98,7 +99,7 @@ router.post('/update', function(req, res) {
 });
 
 // Delete Action
-router.get('/delete/:movieId', function(req, res) {
+router.get('/delete/:movieId', cekAuth, function(req, res) {
    Movie.findByIdAndDelete(req.params.movieId, function(){
     res.redirect('/movies');
    }); 
